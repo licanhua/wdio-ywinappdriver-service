@@ -1,7 +1,7 @@
 import logger from '@wdio/logger';
 import { ChildProcessByStdio, spawn } from 'child_process';
-import { createWriteStream, ensureFileSync } from 'fs-extra';
-import { join, resolve } from 'path';
+import { createWriteStream, ensureFileSync, pathExists } from 'fs-extra';
+import { dirname, join, resolve } from 'path';
 import { Readable, Writable } from 'stream';
 import WebdriverIO, { Config, SevereServiceError } from 'webdriverio';
 
@@ -14,7 +14,6 @@ export class WinAppDriverLauncher implements WebdriverIO.ServiceInstance {
   command: string;
   logPath: string;
   process: ChildProcessByStdio<Writable, Readable, Readable> | null;
-  port: number;
 
   constructor(options: Record<string, any>, capabilities: WebDriver.DesiredCapabilities, config: Config) {
     this.args = options.args || [];
@@ -24,11 +23,6 @@ export class WinAppDriverLauncher implements WebdriverIO.ServiceInstance {
     const isWindows = process.platform === 'win32';
     if (!this.command) {
       this.command = WINAPPDRIVER_BIN;
-    }
-    this.port = config.port || 4723;
-
-    if (this.args.length == 0) {
-      this.args = ['--urls', 'http://127.0.0.1:' + this.port.toString()];
     }
   }
 
@@ -55,7 +49,8 @@ export class WinAppDriverLauncher implements WebdriverIO.ServiceInstance {
   _startWinAppDriver(): Promise<void> {
     return new Promise((resolve, reject) => {
       log.debug(`spawn CLI process: ${this.command} ${this.args.join(' ')}`);
-      this.process = spawn(this.command, this.args, { stdio: ['pipe', 'pipe', 'pipe'] });
+      const dir = dirname(this.command);
+      this.process = spawn(this.command, this.args, { stdio: ['pipe', 'pipe', 'pipe'], cwd: dir });
       let error: string;
 
       this.process.stdout.on('data', data => {
