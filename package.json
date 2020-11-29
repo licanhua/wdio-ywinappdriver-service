@@ -1,6 +1,6 @@
 {
   "name": "wdio-ywinappdriver-service",
-  "version": "0.2.53",
+  "version": "0.2.54",
   "description": "A WebdriverIO service to start & stop YWinAppDriver",
   "main": "dist/index.js",
   "homepage": "https://github.com/licanhua/wdio-ywinappdriver-service",
