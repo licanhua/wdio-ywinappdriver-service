@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/wdio-ywinappdriver-service.png)](https://npmjs.org/package/wdio-ywinappdriver-service)
+
 # WebdriverIO ywinappdriver Service
 
 This service helps you to run the ywinappdriver server seamlessly when running tests with the [WDIO testrunner](https://webdriver.io/guide/testrunner/gettingstarted.html). It starts the [ywinappdriver](https://github.com/licanhua/YWinAppDriver) in a child process.
